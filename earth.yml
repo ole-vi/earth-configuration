@@ -1,0 +1,29 @@
+services:
+  couchdb:
+    expose:
+      - 5984
+    image: couchdb:2.1.1
+    ports:
+      - "2200:5984"
+      - "2201:5986"
+    volumes:
+      - "/srv/earth/conf:/opt/couchdb/etc/local.d"
+      - "/srv/earth/data:/opt/couchdb/data"
+      - "/srv/earth/log:/opt/couchdb/var/log"
+  db-init:
+    image: treehouses/planet:0.1.4
+    depends_on:
+      - couchdb
+    environment:
+      - COUCHDB_HOST=http://couchdb:5984
+  planet:
+    image: treehouses/planet:0.1.4
+    ports:
+      - "80:80"
+    environment:
+      - HOST_PROTOCOL=http
+      - DB_HOST=earth.ole.org
+      - DB_PORT=2200
+    depends_on:
+      - couchdb
+version: "2"
