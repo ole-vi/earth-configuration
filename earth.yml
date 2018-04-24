@@ -24,6 +24,8 @@ services:
     volumes:
       - ./out/earth.ole.org/:/etc/nginx/certs/earth.ole.org/
       - ./configs/app.conf:/etc/nginx/conf.d/app.conf
+    depends_on:
+     - planet
     ports:
      - "80:80"
      - "443:443"
